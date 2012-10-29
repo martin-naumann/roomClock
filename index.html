@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta charset="utf-8" />
+        <script src="cordova.js"></script>
+        <script charset="utf-8" src="Plugins/Child Browser/childbrowser.js"></script>        
+        <script src="kendo/js/jquery.min.js"></script>
+        <script src="kendo/js/kendo.mobile.min.js"></script>
+        <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+        <script src="scripts/hello-world.js"></script>
+
+        <link href="kendo/styles/kendo.mobile.all.min.css" rel="stylesheet" />
+        <link href="styles/main.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div data-role="view" id="home" data-title="Loading">
+            <h1>
+                This app only exists to piss off the iOS people AND solve the roomClock problem
+            </h1>
+        </div>
+         <div data-role="view" id="tabstrip-calendar0">
+             <div style="float:left; height:50%"></div>
+             <div class="wrapper">
+                 <h1 class="calendarName">Loading...</h1>
+                 <h2 class="eventContainer">
+                     Loading calendar data
+                </h2>
+                 <h3 class="eventTime">
+                     -
+                 </h3>
+             </div>
+        </div>
+                
+        <div data-role="layout" data-id="mobile-tabstrip">
+            <header data-role="header">
+                <div data-role="navbar">
+                    <span data-role="view-title"></span>
+                </div>
+            </header>
+
+            <div data-role="footer">
+                <div data-role="tabstrip" id="footer-items">
+                    <a href="#" data-icon="globe">Home</a>
+                </div>
+            </div>
+        </div>
+
+         <div data-role="layout" data-id="mobile-tabstrip" data-platform="android">
+            <div data-role="footer">
+                <div data-role="tabstrip" id="footer-android-items">
+                    <a href="#" data-icon="globe">Home</a>
+                </div>
+            </div>
+        </div> 
+
+        <script>
+            var app = new kendo.mobile.Application(document.body, { transition: "slide", layout: "mobile-tabstrip" });
+        </script>
+    </body>
+</html>

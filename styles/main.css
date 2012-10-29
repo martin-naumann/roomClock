@@ -1,0 +1,30 @@
+body, .km-content
+{
+    font: Arial, sans-serif;
+    background-color: #000 !important;
+    color: #fff !important;
+}
+
+.wrapper {
+    clear: both;
+    margin-top: 20%;
+}
+
+.buttonArea,
+.footerText,
+h1, h2, h3
+{
+    text-align: center;
+}
+
+h1 {
+    font-size: 5em;
+}
+
+h2 {
+    font-size: 3em;
+}
+
+h3 {
+    font-size: 2em;
+}
