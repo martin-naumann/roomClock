@@ -75,4 +75,6 @@ function getCalendarEvents(calendar, index, token) {
             $("#tabstrip-calendar" + index + " .eventTime").text(timeString);
         }
     }).fail(function(xhr, complaint) { alert("ERROR:" + xhr.responseText + " D:"); });
+
+    setTimeout(function() { getCalendarEvents(calendar, index, token); }, 60000);
 }
