@@ -45,7 +45,7 @@ function onDeviceReady() {
 function getCalendarEvents(calendar, index, token) {
     //Get only the next or currently running event
     var now = new Date();
-    var dateTimeString = now.getFullYear() +"-"+ (now.getMonth()+1) + "-" + now.getDate() +"T"+ now.getHours() + ":" + now.getMinutes() + ":00Z" ;
+    var dateTimeString = now.getFullYear() +"-"+ (now.getMonth()+1) + "-" + now.getDate() +"T"+ now.getHours() + ":" + now.getMinutes() + ":00+01:00" ;
     $.ajax({
         url: "https://www.googleapis.com/calendar/v3/calendars/" + calendar + "/events?access_token=" + token,
         datatype : "json",
@@ -53,6 +53,7 @@ function getCalendarEvents(calendar, index, token) {
             "orderBy": "startTime",
             "singleEvents": true,
             "key": google_api_key,
+            "timeMin": dateTimeString
             }
     })
     .done(function(result) {
@@ -64,11 +65,14 @@ function getCalendarEvents(calendar, index, token) {
             $("#tabstrip-calendar" + index + " .eventContainer").text(result.items[0].summary);
             
             var startDate = new Date(result.items[0].start.dateTime);
-            var startString = ("0" + startDate.getUTCHours()).slice(-2) + ":" + ("0" + startDate.getUTCMinutes()).slice(-2);
+            var startString = ("0" + startDate.getHours()).slice(-2) + ":" + ("0" + startDate.getMinutes()).slice(-2);
             var endDate = new Date(result.items[0].end.dateTime);
-            var endString = ("0" + endDate.getUTCHours()).slice(-2) + ":" + ("0" + endDate.getUTCMinutes()).slice(-2);
+            var endString = ("0" + endDate.getHours()).slice(-2) + ":" + ("0" + endDate.getMinutes()).slice(-2);
             
-            $("#tabstrip-calendar" + index + " .eventTime").text(startString + " - " + endString);
+            var timeString = startString + " to " + endString;
+            if(startDate.getDate() != new Date().getDate()) timeString ="On the " + ("0" + startDate.getDate()).slice(-2) + "/" + ("0" + startDate.getMonth()).slice(-2) + " from " + timeString;
+            
+            $("#tabstrip-calendar" + index + " .eventTime").text(timeString);
         }
     }).fail(function(xhr, complaint) { alert("ERROR:" + xhr.responseText + " D:"); });
 }
