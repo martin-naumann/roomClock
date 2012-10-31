@@ -6,6 +6,7 @@ var google_api_key = "";
 //Automatically fetched:
 var google_refresh_token = null;
 var google_token = null;
+var firstRequest = [true, true, true];
 
 var calendars = [
 ];
@@ -68,7 +69,7 @@ function getNewAccessToken() {
         }, function(result) {
             google_token = result.access_token;
             setTimeout("getNewAccessToken()", (result.expires_in - 10) * 1000);
-        }).error(function(xhr) { alert("ERROR: Cannot refresh the access token (" + xhr.responseText + ")") });    
+        }); //.error(function(xhr) { alert("ERROR: Cannot refresh the access token (" + xhr.responseText + ")") });    
 }
 
 function getCalendarEvents(calendar, index) {
@@ -90,8 +91,17 @@ function getCalendarEvents(calendar, index) {
             $("#tabstrip-calendar" + index + " div.eventContainer").text(result.error.message + " :(");
         } else {
 
-            $("#tabstrip-calendar" + index + " h1, #tabstrip" + index).text(result.summary);
-            $("#tabstrip-calendar" + index + " .eventContainer").text(result.items[0].summary);
+            if(firstRequest[index]) {
+                $("#tabstrip-calendar" + index + " h1, #tabstrip" + index).text(result.summary);
+                firstRequest[index] = false;
+            }
+            
+            if(!result.items[0] || !result.items[0].summary) {
+                $("#tabstrip-calendar" + index + " .eventContainer").text("Occupied");
+            }
+            else {
+                $("#tabstrip-calendar" + index + " .eventContainer").text(result.items[0].summary);            
+            }
             
             var startDate = new Date(result.items[0].start.dateTime);
             var startString = ("0" + startDate.getHours()).slice(-2) + ":" + ("0" + startDate.getMinutes()).slice(-2);
@@ -99,11 +109,11 @@ function getCalendarEvents(calendar, index) {
             var endString = ("0" + endDate.getHours()).slice(-2) + ":" + ("0" + endDate.getMinutes()).slice(-2);
             
             var timeString = startString + " to " + endString;
-            if(startDate.getDate() != new Date().getDate()) timeString ="On the " + ("0" + startDate.getDate()).slice(-2) + "/" + ("0" + startDate.getMonth()).slice(-2) + " from " + timeString;
+            if(startDate.getDate() != new Date().getDate()) timeString ="On the " + ("0" + startDate.getDate()).slice(-2) + "/" + ("0" + (startDate.getMonth() + 1)).slice(-2) + " from " + timeString;
             
             $("#tabstrip-calendar" + index + " .eventTime").text(timeString);
         }
-    }).fail(function(xhr, complaint) { alert("ERROR:" + xhr.responseText + " D:"); });
+    }); //.fail(function(xhr, complaint) { alert("ERROR:" + xhr.responseText + " D:"); });
     
     setTimeout(function() { getCalendarEvents(calendar, index); }, 60000);
 }
